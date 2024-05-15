@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1>LIST EMPLOYEES</h1>
+    <br>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Home</li>
+        </ol>
+    </nav>
+    <div class="row justify-content-between align-items-center">
+        <div class="col-md-6">
+            <a href="/employees/add" class="btn btn-info">Add New</a>
+        </div>
+        <div class="col-md-6 m-0">
+            <form class="form-inline my-2 my-lg-0" action="/employees/search" method="GET">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       name="searchQuery">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    <br>
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Employee Name</th>
+            <th>Address</th>
+            <th>Date Of Birth</th>
+            <th>Phone</th>
+            <th colspan="2">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="e : ${employees}">
+            <td th:text="${e.empId}"></td>
+            <td th:text="${e.empName}"></td>
+            <td th:text="${e.address}"></td>
+            <td th:text="${#dates.format(e.dateOfBirth, 'yyyy-MM-dd')}"></td>
+            <td th:text="${e.phone}"></td>
+            <td class="text-center">
+                <a th:href="@{/employees/edit(empId=${e.empId})}" class="btn btn-warning">Edit</a>
+            </td>
+            <td class="text-center">
+                <a th:href="@{/employees/delete(empId=${e.empId})}"
+                   onclick="return confirm('Are you sure you want to delete this employee?');" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination section -->
+    <nav aria-label="Page navigation example" th:if="${totalPages > 1}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:class="${currentPage == 1} ? 'page-item disabled' : 'page-item'">
+                <a class="page-link" th:href="@{${'/?page=' + (currentPage - 1)}}">Previous</a>
+            </li>
+            <li th:each="pageNo : ${#numbers.sequence(1, totalPages)}"
+                class="page-item" th:class="${pageNo == currentPage} ? 'page-item active' : 'page-item'">
+                <a class="page-link" th:href="@{${'/?page=' + pageNo}}" th:text="${pageNo}"></a>
+            </li>
+            <li class="page-item" th:class="${currentPage == totalPages} ? 'page-item disabled' : 'page-item'">
+                <a class="page-link" th:href="@{${'/?page=' + (currentPage + 1)}}">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
